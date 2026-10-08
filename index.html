@@ -682,20 +682,56 @@ function sessEff(d){
 /* ---------- plain-English tooltips ---------- */
 var GLOSS=[
  [/strides?/i,'Strides','Short, smooth, fast bursts of 15 to 20 seconds. Run at about 85 to 90% of sprint speed, tall and relaxed, never all out. Walk or jog back until you feel fully recovered (about 45 to 60 s). They sharpen leg speed and running form without making you tired.'],
- [/hand over hand/i,'Hand over hand','Sled pull technique: sit back, feet planted, and pull the rope in with alternating hands, one over the other. Do not walk backwards while pulling.'],
- [/^Sled push/i,'Sled push','Hips low, arms straight, short fast steps. Keep driving and do not stand up between steps.'],
- [/^Sled pull/i,'Sled pull','Sit back with your feet planted and pull the rope in, hand over hand. Keep your chest up and do not walk backwards.'],
- [/^Wall balls?/i,'Wall balls','Squat holding the ball at your chest, stand and throw it to the target (3 m for Men\'s Open, 6 kg ball). Catch it and go straight into the next squat. Break sets early rather than failing late.'],
- [/^Burpee broad jumps?/i,'Burpee broad jumps','Chest to the floor, stand, then jump forward as far as you can with both feet. Land softly and go straight into the next burpee. Stepping up instead of jumping is fine when tired.'],
- [/^Farmers carry/i,'Farmers carry','Walk with a heavy weight in each hand. Stand tall, shoulders back, quick short steps.'],
- [/conversational|nose breathing/i,'Conversational pace','Easy enough to speak full sentences. If you cannot, slow down. Easy days build the aerobic base that decides most of your race.'],
+ [/^Warm-?up/i,'Warm-up','Easy movement to raise your heart rate and loosen your joints. Start slow and build gradually. Do not skip it: it is what keeps the hard part safe.'],
+ [/^Cool-?down/i,'Cool-down','Slow walking and light stretching for calves, hips and quads. It brings your heart rate down and helps you recover.'],
+ [/^Rest$|recovery$/i,'Rest','Breathe slowly and walk around, do not sit down. The timer counts down and moves on by itself. Tap the tick to skip it.'],
+ [/hand over hand|^Sled pull/i,'Sled pull','Sit back with your feet planted and pull the rope in, hand over hand, keeping your chest up. Drive through your legs and hips, not just your arms. Do not walk backwards while pulling.'],
+ [/^Sled push/i,'Sled push','Hands on the posts, arms straight, hips low, back flat. Take short, fast, driving steps and keep the sled moving. Do not stand up between steps.'],
+ [/wall balls?\b/i,'Wall balls','Hold the ball at your chest and squat to at least parallel. Stand up fast and throw it to the target (3 m for Men\'s Open, 6 kg ball). Catch it and go straight into the next squat. Plan your sets, for example 25, 20, 20, 15, 10, 10.'],
+ [/burpee broad jumps?/i,'Burpee broad jumps','Chest to the floor, stand, then jump forward as far as you can with both feet. Land softly and go straight into the next burpee. Stepping up instead of jumping is fine when you are tired.'],
+ [/^Burpees?\b/i,'Burpees','Chest to the floor, stand up, small jump with a clap overhead. Keep a steady rhythm you can hold for the whole set.'],
+ [/^Farmers carry/i,'Farmers carry','Pick up a heavy weight in each hand, stand tall with shoulders back, and walk quickly with short steps. Do not let the weights swing. Squeeze the handles hard.'],
+ [/lunges?/i,'Lunges','Take a long step, drop the back knee close to the floor, keep your chest up and front knee over your foot. Push through the front heel to step into the next lunge. Hold the weight at your chest or by your sides.'],
+ [/^SkiErg/i,'SkiErg','Stand tall facing the machine, hinge at the hips and pull the handles down past your thighs using your lats and core, then let your arms rise. Think hips first, then arms. Stay smooth rather than yanking, and breathe out on the pull.'],
+ [/^(Row|Rowing)\b|bike or row|ski or row/i,'Rowing','Legs, then body, then arms: push with your legs, lean back slightly, pull the handle to your ribs. Reverse it on the way back: arms, body, legs. Keep your chest up and your pace even.'],
+ [/assault bike/i,'Assault bike','Push and pull the handles while pedalling, using arms and legs together. Go hard for the work time, then ease right off for the rest part.'],
+ [/^Back squat/i,'Back squat','Bar across your upper back, feet shoulder width. Sit down and back until your thighs are at least parallel, chest up, knees tracking over your toes. Drive up through your whole foot. Stop with a couple of reps left.'],
+ [/^Romanian deadlift/i,'Romanian deadlift','Hold the bar or dumbbells in front of your thighs. Push your hips back with soft knees, back flat, lowering until you feel your hamstrings stretch. Squeeze your glutes to stand tall.'],
+ [/^Split squat/i,'Split squat','Stand with one foot well forward and one back. Lower your back knee towards the floor, then push up through the front foot. Keep your torso upright. Do all reps on one leg, then switch.'],
+ [/^Step-?ups?/i,'Step-ups','Put one foot fully on a bench or box. Drive up through that heel until you stand tall, then lower slowly. Do not push off the back foot. Alternate or finish one leg first as written.'],
+ [/^Goblet squat/i,'Goblet squat','Hold a dumbbell or kettlebell against your chest. Sit down between your knees with your chest up, elbows inside your knees, then stand up.'],
+ [/^Hip thrust/i,'Hip thrust','Upper back on a bench, feet flat, weight across your hips. Drive your hips up until your body is a straight line from shoulders to knees, squeeze your glutes at the top, then lower with control.'],
+ [/^Calf raises?/i,'Calf raises','Stand on the edge of a step or on the floor. Rise onto your toes as high as you can, pause, then lower slowly.'],
+ [/^Back extension/i,'Back extension','Lie face down on the machine with your hips on the pad. Lower your chest, then raise your body until it is in a straight line. Squeeze your glutes and do not arch past straight.'],
+ [/^Hanging knee raises?/i,'Hanging knee raises','Hang from a bar with straight arms. Lift your knees up towards your chest without swinging, then lower slowly. Brace your core the whole time.'],
+ [/side plank/i,'Side plank','Lie on your side, forearm under your shoulder. Lift your hips so your body is straight from head to feet and hold. Do the time on each side.'],
+ [/shoulder taps/i,'Plank shoulder taps','Hold a high plank with feet wide. Tap one shoulder with the opposite hand, then the other, keeping your hips still and level.'],
+ [/\bplank\b/i,'Plank','Forearms on the floor, elbows under shoulders, body in a straight line from head to heels. Squeeze your glutes and abs and keep breathing. Do not let your hips sag.'],
+ [/thrusters?/i,'Thrusters','Hold two dumbbells at your shoulders. Squat down, then drive up and press them overhead in one smooth movement. Lower them back to your shoulders and go straight into the next squat.'],
+ [/^Single arm dumbbell row/i,'Single arm dumbbell row','One hand and knee on a bench, back flat. Pull the dumbbell up to your hip, squeeze your shoulder blade, then lower slowly. Do all reps on one arm, then switch.'],
+ [/EMOM/i,'EMOM','Every minute on the minute: start the reps at the start of each minute, and rest for whatever time is left in that minute. The faster you finish, the more you rest.'],
+ [/target \d|for time|sub 90 split/i,'For time','Do the distance or reps as fast as you can while staying in control. The target time is what you need on race day.'],
+ [/^Rep \d+ of|\d+ km @|\d+ min @|running$|^10 km|^5 km/i,'Run','Run at the target pace shown. Start a touch slower than you think you should and keep it even. The last rep should feel just as controlled as the first.'],
+ [/conversational|nose breathing|easy|jog/i,'Easy effort','Easy enough to speak full sentences. If you cannot, slow down. Easy days build the aerobic base that decides most of your race.'],
  [/RPE/,'RPE','Rate of perceived effort from 1 (very easy) to 10 (maximum). RPE 7 means hard but you could do about 3 more reps.']
 ];
 function glossFor(t){for(var i=0;i<GLOSS.length;i++)if(GLOSS[i][0].test(t||''))return i;return -1}
 var QM='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>';
+function glossStep(st){var c=[st.o,st.n,st.d];for(var i=0;i<c.length;i++){var g=glossFor(c[i]);if(g>=0)return g}return -1}
+function qStep(st){
+  if(st.k==='rest'&&false)return '';
+  var i=glossStep(st);
+  if(i>=0)return '<button class="qm" data-a="gl" data-g="'+i+'" aria-label="What is '+esc(GLOSS[i][1])+'?">'+QM+'</button>';
+  return '<button class="qm" data-a="glt" data-t="'+esc(st.n)+'" data-x="'+esc((st.o||st.d||st.n)+'. Tap the tick when you have finished it.')+'" aria-label="How to do this">'+QM+'</button>';
+}
+function qLine(x){
+  var i=glossFor(x);
+  if(i>=0)return '<button class="qm" data-a="gl" data-g="'+i+'" aria-label="What is '+esc(GLOSS[i][1])+'?">'+QM+'</button>';
+  return '<button class="qm" data-a="glt" data-t="'+esc(x.split(/ \d+ × | \d+ (?:min|sets) |, rest| @ /)[0])+'" data-x="'+esc(x)+'" aria-label="How to do this">'+QM+'</button>';
+}
 function qBtn(t){var i=glossFor(t);return i<0?'':'<button class="qm" data-a="gl" data-g="'+i+'" aria-label="What is '+esc(GLOSS[i][1])+'?">'+QM+'</button>'}
-function showGloss(i){
-  var g=GLOSS[i],el=document.getElementById('sheet');if(!g||!el)return;
+function showGloss(i,custom){
+  var g=custom||GLOSS[i],el=document.getElementById('sheet');if(!g||!el)return;
   el.innerHTML='<div class="sheetbd" data-a="glx"></div><div class="sheetbox" role="dialog" aria-label="'+esc(g[1])+'"><div class="sheeth"><b>'+esc(g[1])+'</b><button class="qm" data-a="glx" aria-label="Close">&#10005;</button></div><p>'+esc(g[2])+'</p></div>';
   el.className='on';
 }
@@ -855,7 +891,7 @@ function sessionScreen(d){
    (l.w?'<button class="rnd" data-a="wan" data-d="'+d+'" aria-label="View summary">'+ic('chart',24)+'</button>':'')+'</div>'+
    '<div class="card">'+s.blocks.map(function(b,bi){return '<div class="blk"><h3>'+esc(b[0])+'</h3><ul>'+b[1].map(function(x,li){
      var can=altFor(x)&&s.t!=='sim'&&s.t!=='rest'&&!(s.p&&s.p.k==='sim'),sw=can&&altIdx(s,x)>0;
-     return '<li>'+esc(can?effLine(s,x):x)+qBtn(x)+(can?'<button class="qm altq" data-a="alt" data-d="'+d+'" data-b="'+bi+'" data-l="'+li+'" aria-label="'+(sw?'Next alternative':'Swap exercise')+'">'+ic('swap',16)+'</button>':'')+(sw?' <span class="altTag">Alt</span>':'')+'</li>'}).join('')+'</ul></div>'}).join('')+
+     return '<li>'+esc(can?effLine(s,x):x)+(/^(Main set|Strength|Sled|Accessories|Core|Finish|Format|Test)$/.test(b[0])?qLine(x):qBtn(x))+(can?'<button class="qm altq" data-a="alt" data-d="'+d+'" data-b="'+bi+'" data-l="'+li+'" aria-label="'+(sw?'Next alternative':'Swap exercise')+'">'+ic('swap',16)+'</button>':'')+(sw?' <span class="altTag">Alt</span>':'')+'</li>'}).join('')+'</ul></div>'}).join('')+
    (s.note?'<div class="note"><b>Coach note</b>'+esc(s.note)+'</div>':'')+'</div>';
   out+='<div class="sec"><h2>Log</h2></div><div class="card form">';
   if(s.f.length){
@@ -1127,7 +1163,7 @@ function workoutScreen(){
   var last=W.i===W.steps.length-1,canAlt=st.k==='work'&&st.o&&altFor(st.o);
   var out='<div class="wtop"><button class="rnd sm" data-a="wend" aria-label="End workout">'+ic('x',20)+'</button>'+
    '<div class="wmid"><b class="num" id="wTotal">'+fmtT(Math.floor(elTotal()))+'</b><small>'+(W.i+1)+' of '+W.steps.length+'</small></div>'+
-   (qBtn(st.o||st.d||st.n)||'<span class="qmsp"></span>').replace('class="qm"','class="rnd sm"')+'</div>'+
+   (st.k==='rest'?'<span class="qmsp"></span>':qStep(st).replace('class="qm"','class="rnd sm"'))+'</div>'+
    '<div class="wbar"><i style="width:'+Math.round(W.i/W.steps.length*100)+'%"></i></div>'+
    '<div class="wc'+(isRest?' rest':'')+'"><h2>'+esc(st.n)+'</h2><div class="wd2">'+esc(subline(st))+'</div>'+
    '<div class="wo-time" id="wBig">'+big+'</div><div class="wo-tgt">'+esc(stepTgt(st))+'</div>'+
@@ -1363,6 +1399,7 @@ document.addEventListener('click',function(e){
   else if(a==='askai'){askAI()}
   else if(a==='wstart'){startWorkout(b.dataset.d)}
   else if(a==='gl'){showGloss(+b.dataset.g)}
+  else if(a==='glt'){showGloss(0,[0,b.dataset.t,b.dataset.x])}
   else if(a==='glx'){hideGloss()}
   else if(a==='wnext'){if(W)advance()}
   else if(a==='walt'){if(W){var cs=W.steps[W.i],ss=SESS[W.d];if(cs&&cs.o){cycleAlt(ss,cs.o);W.steps=buildSteps(sessEff(W.d));W.ss=nowMs();saveActive();render()}}}
