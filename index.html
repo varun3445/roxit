@@ -884,7 +884,7 @@ function workoutScreen(){
     }).join('')+'</div>';
   }
   out+='<div class="wo-btns"><button class="btn big" data-a="wnext">'+(isRest?'Skip rest':(last?'Finish workout':'Done, next'))+'</button>'+
-   '<div class="pair"><button class="btn ghost small" data-a="wpause">'+(W.paused?'Resume':'Pause')+'</button><button class="btn ghost small" data-a="wend">'+(W.ce?'Tap again to end':'End workout')+'</button></div></div>';
+   '<div class="pair"><button class="btn ghost small" data-a="wpause">'+(W.paused?'Resume':'Pause')+'</button><button class="btn ghost small" data-a="wend">'+'End workout'+'</button></div></div>';
   return out;
 }
 function analyse(w){
@@ -1116,12 +1116,7 @@ document.addEventListener('click',function(e){
   else if(a==='wstart'){startWorkout(b.dataset.d)}
   else if(a==='wnext'){if(W)advance()}
   else if(a==='wpause'){if(W){if(W.paused){var dl=Date.now()-W.pa;W.ss+=dl;W.t0+=dl;W.paused=false}else{W.paused=true;W.pa=Date.now()}saveActive();render()}}
-  else if(a==='wend'){
-    if(W){
-      if(!W.ce){W.ce=true;render();setTimeout(function(){if(W){W.ce=false;if(mode==='workout')render()}},3000)}
-      else{finishWorkout(true)}
-    }
-  }
+  else if(a==='wend'){if(W)finishWorkout(true)}
   else if(a==='wan'){view=b.dataset.d;mode='analysis';formRpe=(S.logs[view]&&S.logs[view].rpe)||0;render();window.scrollTo(0,0)}
   else if(a==='anclose'){if(S.logs[view]){S.logs[view].rpe=formRpe;persist()}view=null;mode=null;render();window.scrollTo(0,0);toast('Workout saved')}
   else if(a==='wmove'){swapSrc=b.dataset.d;view=swapSrc;mode='swap';swapWk=weekOf(swapSrc).n;render();window.scrollTo(0,0)}
