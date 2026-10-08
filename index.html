@@ -90,6 +90,9 @@ h1,h2,h3{font-family:var(--display);font-weight:800;text-transform:uppercase;let
 .bar{height:10px;border-radius:999px;background:var(--surface2);overflow:hidden}
 .bar i{display:block;height:100%;background:var(--accent);border-radius:999px}
 .bar.ink i{background:var(--ink)}
+.bar.dual{position:relative}
+.bar.dual i{position:absolute;left:0;top:0}
+.bar.dual .pl{opacity:.3}
 .cols{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;align-items:end;height:84px}
 .cols div{display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:5px;align-items:center}
 .cols i{display:block;width:100%;background:var(--surface2);border-radius:6px 6px 3px 3px;position:relative;overflow:hidden}
@@ -998,8 +1001,8 @@ function progressScreen(){
   out+='<div class="sec"><h2>Sled loads</h2><span class="muted">kg total, race: push 152, pull 103</span></div><div class="card stack">'+
    sl.map(function(r){
      var lp=r.log&&r.log.f?numOf(r.log.f[0]):0;
-     return '<div><div style="display:flex;justify-content:space-between;gap:8px"><b>'+(r.w.n===0?'Primer':'Week '+r.w.n)+'</b><span class="muted num">plan '+r.ld[0]+' push · '+r.ld[1]+' pull'+(lp?' · logged '+lp:'')+'</span></div><div class="sp"></div><div class="bar"><i style="width:'+Math.round(r.ld[0]/152*100)+'%;opacity:.45"></i></div><div class="sp"></div><div class="bar ink"><i style="width:'+Math.min(100,Math.round(lp/152*100))+'%"></i></div></div>';
-   }).join('')+'<div class="muted" style="font-size:13px">Yellow bar is the planned push load, dark bar is what you logged.</div></div>';
+     return '<div><div style="display:flex;justify-content:space-between;gap:8px"><b>'+(r.w.n===0?'Primer':'Week '+r.w.n)+'</b><span class="muted num">plan '+r.ld[0]+' push · '+r.ld[1]+' pull'+(lp?' · logged '+lp:'')+'</span></div><div class="sp"></div><div class="bar dual"><i class="pl" style="width:'+Math.round(r.ld[0]/152*100)+'%"></i><i class="lg" style="width:'+Math.min(100,Math.round(lp/152*100))+'%"></i></div></div>';
+   }).join('')+'<div class="muted" style="font-size:13px">Faded bar is the planned push load. Solid is what you logged. Full width is the race load of 152 kg.</div></div>';
   return out;
 }
 var STN=[['ski','SkiErg','1000 m'],['push','Sled push','50 m, 152 kg incl. sled'],['pull','Sled pull','50 m, 103 kg incl. sled'],['bbj','Burpee broad jumps','80 m'],['row','Row','1000 m'],['farm','Farmers carry','200 m, 2 × 24 kg'],['lunge','Sandbag lunges','100 m, 20 kg'],['wb','Wall balls','100 reps, 6 kg to 3 m']];
