@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -336,6 +336,105 @@ nav button{font-size:.78rem;letter-spacing:.07em}
 @keyframes sheetup{to{transform:none}}
 @media (prefers-reduced-motion:reduce){.sheetbox{transform:none;animation:none}.sheetbd{opacity:1;animation:none}}
 @media (prefers-reduced-transparency:reduce){.sheetbox{background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none}}
+
+/* ---------- redesign layer: simple, icon first ---------- */
+:root,:root[data-theme="dark"]{color-scheme:dark}
+.topl{display:flex;justify-content:space-between;align-items:baseline;margin:6px 0 18px;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+.topl .acc{color:var(--accent);letter-spacing:.08em}
+.fc{border-radius:24px;padding:20px;margin-bottom:20px;background:var(--surface);box-shadow:var(--shadow-2);border:1px solid var(--line)}
+.fc-top{margin-bottom:12px}
+.fc-hint{display:inline-flex;color:var(--ink2)}
+.fc-cols{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin:0 0 14px}
+.fc-cols>div{min-width:0}
+.fc-cols>div.fct{text-align:right}
+.fc-cols b{font-size:clamp(2.2rem,14vw,3.4rem);letter-spacing:-.02em;line-height:1}
+.fc-cols .fct b{font-size:clamp(1.5rem,8.4vw,1.9rem)}
+.fc-cols small{display:block;font-family:var(--body);font-weight:400;font-size:.8rem;letter-spacing:0;text-transform:none;color:var(--ink2);margin-top:4px}
+.fc-bar{background:var(--line)}
+.strip{display:grid;grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:20px}
+.wd{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink2);font-size:.78rem;font-weight:600;padding:0;background:none;border:0;box-shadow:none}
+.wd .dot{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--surface2);color:var(--c)}
+.wd.today .dot{background:var(--accent);color:var(--on-accent)}
+.wd.done .dot{background:color-mix(in srgb,var(--ok) 22%,var(--surface2));color:var(--ok)}
+.wd.today.done .dot{background:var(--accent);color:var(--on-accent)}
+.tcard{display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:18px 18px 18px 20px;box-shadow:var(--shadow-1)}
+.tmid{flex-grow:1;min-width:0;text-align:left;display:block}
+.tmid small{display:block;font-size:.82rem;color:var(--ink2);margin-bottom:4px}
+.tmid h2{font-size:clamp(1.4rem,7vw,1.75rem);line-height:1.06}
+.play{flex:none;width:64px;height:64px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;box-shadow:0 10px 24px -10px rgba(242,226,5,.7);transition:transform .35s var(--ease-out)}
+.play:active{transform:scale(.93);transition-duration:.08s}
+.play.ghostp{background:var(--surface2);color:var(--ink);box-shadow:none}
+.play.xl{width:104px;height:104px;box-shadow:0 14px 30px -12px rgba(242,226,5,.7)}
+.rnd{flex:none;width:56px;height:56px;border-radius:50%;background:var(--surface);color:var(--ink);display:grid;place-items:center;border:1px solid var(--line);transition:transform .35s var(--ease-out)}
+.rnd:active{transform:scale(.92);transition-duration:.08s}
+.rnd.sm{width:44px;height:44px;color:var(--ink2)}
+.acts{display:flex;align-items:center;gap:14px;margin:4px 0 18px}
+.iback{display:grid;place-items:center;width:44px;height:44px;margin-left:-8px;color:var(--ink2);border-radius:50%}
+.shead{display:flex;gap:14px;align-items:center;margin:6px 0 16px}
+.stype{flex:none;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent)}
+.shead h2{font-size:clamp(1.5rem,7.5vw,1.9rem);line-height:1.05}
+.shead .when{color:var(--ink2);font-size:.9rem;margin-top:3px}
+.saved svg{vertical-align:-3px}
+.row .tag{background:color-mix(in srgb,var(--c) 16%,transparent)}
+.row.done .tag{background:color-mix(in srgb,var(--ok) 22%,transparent);color:var(--ok)}
+.altq{width:26px;height:26px;margin-left:.3rem}
+/* workout */
+.wtop{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.qmsp{width:44px}
+.wmid{text-align:center}
+.wmid b{display:block;font-family:var(--display);font-weight:800;font-size:1.7rem;line-height:1;font-variant-numeric:tabular-nums}
+.wmid small{font-size:.8rem;color:var(--ink2)}
+.wbar{height:4px;border-radius:99px;background:var(--surface2);margin:16px 0 0;overflow:hidden}
+.wbar i{display:block;height:100%;background:var(--accent);transition:width .4s var(--ease-out)}
+.wc{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;min-height:calc(100dvh - 400px);justify-content:center;padding:12px 0}
+.wc h2{font-size:clamp(2rem,10.5vw,2.75rem);line-height:1.04}
+.wc .wd2{font-size:1.05rem;color:var(--ink2);min-height:1.3em}
+.wc .wo-time{margin:8px 0 0}
+.wc .wo-tgt{font-size:.95rem}
+.wc.rest h2{color:var(--ink2)}
+.wpaused{font-family:var(--display);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.wnext{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px 16px;margin:0 0 22px;font-size:.95rem}
+.wnext .ni{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--surface2);color:var(--ink2);flex:none}
+.wnext b{font-weight:600}
+.wctl{display:flex;align-items:center;justify-content:space-between;padding:0 8px}
+.wctl .rnd,.rndsp{width:64px;height:64px}
+.wo-delta{background:var(--surface2)}
+/* summary */
+.sumh small{color:var(--ink2);font-size:.9rem}
+.sumt{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:4px 0 18px}
+.sumt b{font-family:var(--display);font-weight:800;font-size:clamp(3.4rem,18vw,4.25rem);line-height:1;letter-spacing:-.025em}
+.sumt span{font-weight:600;font-size:.95rem}
+.frow{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:16px;color:var(--ink2)}
+.frow .fi{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--surface2);color:var(--ok);flex:none}
+.frow .fm{flex:1;min-width:0}
+.frow small{display:block;font-size:.82rem}
+.frow b{display:block;font-family:var(--display);font-weight:800;font-size:1.5rem;line-height:1.1;color:var(--ink)}
+.bars{display:flex;flex-direction:column;gap:14px;margin-bottom:16px}
+.brow{display:grid;grid-template-columns:minmax(0,7.5rem) 1fr 3.4rem;align-items:center;gap:12px;font-size:.9rem}
+.bn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bt{height:8px;border-radius:99px;background:var(--line);overflow:hidden;display:block}
+.bt i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.bt i.bad{background:var(--sim)}
+.bv{text-align:right;color:var(--ink2)}
+.tip1{display:flex;gap:14px;align-items:flex-start;padding:2px 4px;margin-bottom:20px;line-height:1.45}
+.tip1 .ti{color:var(--accent);flex:none;margin-top:1px}
+.tip1 b{font-weight:600}
+.sumf{display:flex;align-items:flex-end;gap:16px;margin-top:8px}
+.sumr{flex:1;min-width:0}
+.sumr .rpe{gap:3px}
+.sumr .rpe button{min-height:34px;font-size:.95rem;border-radius:8px}
+/* quiet the old chrome */
+nav{background:var(--glass)}
+nav button{font-family:var(--body);font-weight:600;font-size:.7rem;letter-spacing:.02em;text-transform:none}
+.card,.row,.wk{border-radius:20px}
+
+.strip{display:flex;justify-content:space-between;gap:6px}
+.wd{flex:1;min-width:0}
+.fc-cols b{font-size:clamp(2rem,12vw,3rem)}
+.fc-cols{gap:18px}
+.rnd svg:not([stroke]){width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bt2{font-size:clamp(1.7rem,9vw,2.5rem)}
+.total .pair{gap:16px}
 </style>
 </head>
 <body>
@@ -368,6 +467,28 @@ function parseT(s){if(!s)return 0;var p=String(s).trim().split(':').map(Number);
 function fmtT(sec){sec=Math.round(sec);var h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return h?h+':'+pad(m)+':'+pad(s):m+':'+pad(s)}
 
 /* ---------- plan data ---------- */
+var IC={
+ activity:'<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/>',
+ dumbbell:'<path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829l6.364 6.364z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/>',
+ zap:'<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>',
+ flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+ moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+ flag:'<path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528"/>',
+ check:'<path d="M20 6 9 17l-5-5"/>',
+ play:'<polygon points="6 3 20 12 6 21 6 3" fill="currentColor"/>',
+ pause:'<rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/>',
+ x:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+ swap:'<path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/>',
+ chevR:'<path d="m9 18 6-6-6-6"/>',
+ chevL:'<path d="m15 18-6-6 6-6"/>',
+ bulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+ trend:'<polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/>',
+ home:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+ cal:'<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+ chart:'<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>'
+};
+function ic(n,sz){sz=sz||22;return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+IC[n]+'</svg>'}
+var TYI={run:'activity',str:'dumbbell',stn:'zap',sim:'flame',rest:'moon',race:'flag'};
 var TY={run:{n:'Run',k:'RUN',c:'--run'},str:{n:'Strength',k:'STR',c:'--str'},stn:{n:'Stations',k:'STN',c:'--stn'},sim:{n:'Simulation',k:'SIM',c:'--sim'},rest:{n:'Rest',k:'OFF',c:'--rest'},race:{n:'Race day',k:'GO',c:'--race'}};
 var WU=['Warm-up',['8 min easy jog','3 × 20 m strides, leg swings']];
 var CD=['Cool-down',['5 min walk, calf and hip stretch']];
@@ -674,19 +795,14 @@ var tab='today',view=null,mode=null,formRpe=0,openWk={},swapWk=0;
 var cw=weekOf(TODAY<PLAN_START?PLAN_START:(TODAY>RACE?RACE:TODAY));
 if(cw)openWk[cw.n]=true;
 
-var NAV=[
- ['today','Today','<path d="M4 11l8-7 8 7v9H4z"/>'],
- ['plan','Plan','<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>'],
- ['progress','Progress','<path d="M5 20V11M12 20V5M19 20v-7"/>'],
- ['race','Race','<path d="M5 21V4h11l-2 4 2 4H5"/>']
-];
+var NAV=[['today','Today','home'],['plan','Plan','cal'],['progress','Progress','chart'],['race','Race','flag']];
 
 /* ---------- derived ---------- */
 function isDone(d){var l=S.logs[d];return !!(l&&l.done)}
 function planned(untilIncl){var n=0;Object.keys(SESS).forEach(function(d){if(d<=untilIncl&&SESS[d].t!=='rest')n++});return n}
 function doneCount(untilIncl){var n=0;Object.keys(SESS).forEach(function(d){if((!untilIncl||d<=untilIncl)&&SESS[d].t!=='rest'&&isDone(d))n++});return n}
 function chip(t){return '<span class="chip" style="--c:var('+TY[t].c+')">'+TY[t].n+'</span>'}
-function tag(t,d){return '<span class="tag" style="--c:var('+TY[t].c+')">'+(isDone(d)?'✓':TY[t].k)+'</span>'}
+function tag(t,d){return '<span class="tag" style="--c:var('+TY[t].c+')">'+(isDone(d)?ic('check',20):ic(TYI[t],20))+'</span>'}
 function whenLabel(d){
   var n=diffDays(TODAY,d);
   return fmtD(d)+(n===0?' · today':n===1?' · tomorrow':'');
@@ -696,10 +812,7 @@ function whenLabel(d){
 function topBlock(){
   var left=diffDays(TODAY,RACE);
   var cd=left>0?left:(left===0?0:null);
-  var w=weekOf(TODAY<PLAN_START?PLAN_START:(TODAY>RACE?RACE:TODAY));
-  var sub=w?(w.n===0?'Primer week':'Week '+w.n+' of 8 · '+w.name):'Plan complete';
-  return '<div class="top"><div><div class="eyebrow">'+esc(sub)+'</div><h1>Hyrox London</h1><div class="muted" style="margin-top:6px">Men\'s Open · Sun 6 Dec</div></div>'+
-   '<div class="count"><b class="num">'+(cd==null?'DONE':cd)+'</b><span>'+(cd==null?'race run':(cd===1?'day to go':'days to go'))+'</span></div></div>';
+  return '<div class="topl"><span>Hyrox London · 6 Dec</span><span class="acc">'+(cd==null?'Race run':(cd===1?'1 day':cd+' days'))+'</span></div>';
 }
 function todayScreen(){
   var out=topBlock();
@@ -708,32 +821,20 @@ function todayScreen(){
   }
   out+=forecastCard();
   var d=TODAY<PLAN_START?PLAN_START:TODAY, s=SESS[d];
-  var l=S.logs[d];
-  out+='<div class="card hero">'+chip(s.t)+'<h2>'+esc(s.title)+'</h2><div class="when">'+esc(whenLabel(d))+'</div>'+
-   '<div class="stats"><div class="stat"><small>Duration</small><b class="num">'+s.min+' min</b></div><div class="stat" style="grid-column:span 2"><small>Headline</small><b>'+esc(s.head)+'</b></div></div>'+
-   (s.blocks.slice(0,3).map(function(b){return '<div class="blk"><h3>'+esc(b[0])+'</h3><ul>'+b[1].slice(0,2).map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div>'}).join(''))+
-   '<div class="sp"></div>'+(s.t!=='rest'?'<button class="btn" data-a="wstart" data-d="'+d+'">'+(l&&l.w?'Start again':'Start workout')+'</button><div class="sp"></div><button class="btn ghost" data-a="open" data-d="'+d+'">'+(l&&l.done?'Edit log':'Session details')+'</button>':'<button class="btn ghost" data-a="open" data-d="'+d+'">'+(l&&l.done?'Edit log':'Session details')+'</button>')+'</div>';
-  // week strip
-  var w=weekOf(d);
-  out+='<div class="sec"><h2>This week</h2><span class="muted num">'+weekDone(w)+' of '+weekPlanned(w)+' done</span></div><div class="strip">'+
-   weekDates(w).map(function(x){
+  var l=S.logs[d],w=weekOf(d);
+  out+='<div class="strip">'+weekDates(w).map(function(x){
      var ss=SESS[x];
-     return '<button class="day'+(isDone(x)?' done':'')+(x===d?' today':'')+'" style="--c:var('+TY[ss.t].c+')" data-a="open" data-d="'+x+'" aria-label="'+esc(fmtD(x)+', '+ss.title)+'"><small>'+DOW[dt(x).getDay()]+'</small><span class="dot">'+(isDone(x)?'✓':TY[ss.t].k.slice(0,1))+'</span><b class="num">'+dt(x).getDate()+'</b></button>';
+     return '<button class="wd'+(isDone(x)?' done':'')+(x===d?' today':'')+'" style="--c:var('+TY[ss.t].c+')" data-a="open" data-d="'+x+'" aria-label="'+esc(fmtD(x)+', '+ss.title)+'"><small>'+DOW[dt(x).getDay()].slice(0,1)+'</small><span class="dot">'+(isDone(x)?ic('check',20):ic(TYI[ss.t],20))+'</span></button>';
    }).join('')+'</div>';
-  // up next
-  var next=Object.keys(SESS).sort().filter(function(x){return x>d&&SESS[x].t!=='rest'}).slice(0,3);
-  if(next.length){
-    out+='<div class="sec"><h2>Up next</h2></div>'+next.map(function(x){return rowHtml(x)}).join('');
-  }
-  var a=planned(d<TODAY?d:TODAY), dn=doneCount(d<TODAY?d:TODAY);
-  out+='<div class="sec"><h2>Consistency</h2><span class="muted num">'+dn+' of '+a+' sessions so far</span></div><div class="card"><div class="bar"><i style="width:'+(a?Math.round(dn/a*100):0)+'%"></i></div></div>';
+  out+='<div class="tcard"><button class="tmid" data-a="open" data-d="'+d+'" aria-label="Session details"><small>'+(d===TODAY?'Today':esc(whenLabel(d)))+' · '+s.min+' min</small><h2>'+esc(s.title)+'</h2></button>'+
+   (s.t!=='rest'?'<button class="play" data-a="wstart" data-d="'+d+'" aria-label="'+(l&&l.w?'Start again':'Start workout')+'">'+ic('play',28)+'</button>':'<button class="play ghostp" data-a="open" data-d="'+d+'" aria-label="Details">'+ic('chevR',26)+'</button>')+'</div>';
   return out;
 }
 function weekPlanned(w){return weekDates(w).filter(function(x){return SESS[x].t!=='rest'}).length}
 function weekDone(w){return weekDates(w).filter(function(x){return SESS[x].t!=='rest'&&isDone(x)}).length}
 function rowHtml(d){
   var s=SESS[d];
-  return '<button class="row'+(isDone(d)?' done':'')+'" style="--c:var('+TY[s.t].c+')" data-a="open" data-d="'+d+'">'+tag(s.t,d)+'<span class="mid"><b>'+esc(s.title)+'</b><small>'+esc(s.head)+'</small></span><span class="end">'+esc(fmtD(d))+'<br>'+s.min+' min</span></button>';
+  return '<button class="row'+(isDone(d)?' done':'')+'" style="--c:var('+TY[s.t].c+')" data-a="open" data-d="'+d+'">'+tag(s.t,d)+'<span class="mid"><b>'+esc(s.title)+'</b><small>'+esc(s.head)+'</small></span><span class="end">'+esc(fmtD(d).replace(/^(\w+) (\d+) (\w+)$/,'$1 $2'))+'<br>'+s.min+' min</span></button>';
 }
 function planScreen(){
   var out='<div class="top"><div><div class="eyebrow">8 weeks to race day</div><h1>Training plan</h1></div></div>';
@@ -747,34 +848,27 @@ function planScreen(){
 function sessionScreen(d){
   var s=SESS[d], l=S.logs[d]||{};
   if(formRpe===0&&l.rpe)formRpe=l.rpe;
-  var out='<button class="back" data-a="back">‹ Back</button>'+
-   '<div class="card hero">'+chip(s.t)+'<h2>'+esc(s.title)+'</h2><div class="when">'+esc(fmtD(d))+(isDone(d)?' · <span class="saved">✓ Logged</span>':'')+'</div>'+
-   '<div class="stats"><div class="stat"><small>Duration</small><b class="num">'+s.min+' min</b></div><div class="stat" style="grid-column:span 2"><small>Headline</small><b>'+esc(s.head)+'</b></div></div>'+
-   s.blocks.map(function(b,bi){return '<div class="blk"><h3>'+esc(b[0])+'</h3><ul>'+b[1].map(function(x,li){
+  var out='<button class="iback" data-a="back" aria-label="Back">'+ic('chevL',22)+'</button>'+
+   '<div class="shead"><span class="stype" style="--c:var('+TY[s.t].c+')">'+ic(TYI[s.t],26)+'</span><div><h2>'+esc(s.title)+'</h2><div class="when">'+esc(fmtD(d))+' · '+s.min+' min'+(isDone(d)?' · <span class="saved">'+ic('check',16)+' Done</span>':'')+'</div></div></div>'+
+   '<div class="acts">'+(s.t!=='rest'?'<button class="play" data-a="wstart" data-d="'+d+'" aria-label="'+(l.w?'Start again':'Start workout')+'">'+ic('play',28)+'</button>':'')+
+   (canMove(d)?'<button class="rnd" data-a="wmove" data-d="'+d+'" aria-label="Move or swap this day">'+ic('swap',24)+'</button>':'')+
+   (l.w?'<button class="rnd" data-a="wan" data-d="'+d+'" aria-label="View summary">'+ic('chart',24)+'</button>':'')+'</div>'+
+   '<div class="card">'+s.blocks.map(function(b,bi){return '<div class="blk"><h3>'+esc(b[0])+'</h3><ul>'+b[1].map(function(x,li){
      var can=altFor(x)&&s.t!=='sim'&&s.t!=='rest'&&!(s.p&&s.p.k==='sim'),sw=can&&altIdx(s,x)>0;
-     return '<li>'+esc(can?effLine(s,x):x)+(sw?' <span class="altTag">Alternative</span>':'')+qBtn(x)+(can?'<button class="altb" data-a="alt" data-d="'+d+'" data-b="'+bi+'" data-l="'+li+'">'+(sw?'Next option':'Swap exercise')+'</button>':'')+'</li>'}).join('')+'</ul></div>'}).join('')+
+     return '<li>'+esc(can?effLine(s,x):x)+qBtn(x)+(can?'<button class="qm altq" data-a="alt" data-d="'+d+'" data-b="'+bi+'" data-l="'+li+'" aria-label="'+(sw?'Next alternative':'Swap exercise')+'">'+ic('swap',16)+'</button>':'')+(sw?' <span class="altTag">Alt</span>':'')+'</li>'}).join('')+'</ul></div>'}).join('')+
    (s.note?'<div class="note"><b>Coach note</b>'+esc(s.note)+'</div>':'')+'</div>';
-  if(s.t!=='rest'){
-    out+='<div class="sec"><h2>Workout</h2></div><div class="card form">'+
-     (l.w?'<div class="pair"><div class="stat"><small>Last workout</small><b class="num">'+fmtT(l.w.total)+'</b></div><div class="stat"><small>Planned</small><b class="num">'+s.min+' min</b></div></div>':'')+
-     '<button class="btn" data-a="wstart" data-d="'+d+'">'+(l.w?'Start again':'Start workout')+'</button>'+
-     (l.w?'<button class="btn ghost small" data-a="wan" data-d="'+d+'">View analysis</button>':'')+'</div>';
-  }
-  if(canMove(d)){
-    out+='<div class="sec"><h2>Schedule</h2></div><div class="card form"><button class="btn ghost small" data-a="wmove" data-d="'+d+'">Move or swap this day</button></div>';
-  }
-  out+='<div class="sec"><h2>Log this session</h2></div><div class="card form">';
+  out+='<div class="sec"><h2>Log</h2></div><div class="card form">';
   if(s.f.length){
     out+='<div class="fields">'+s.f.map(function(f,i){
       var v=(l.f&&l.f[i]!=null)?l.f[i]:'';
       return '<div><label class="lab" for="lf'+i+'">'+esc(f[0])+'</label><input class="in num" id="lf'+i+'" value="'+esc(v)+'" placeholder="'+esc(f[1])+'" autocomplete="off"></div>';
     }).join('')+'</div>';
   }
-  out+='<div><span class="lab">How hard was it? (1 easy, 10 max)</span><div class="rpe">'+
+  out+='<div><span class="lab">Effort, 1 easy to 10 max</span><div class="rpe">'+
    [1,2,3,4,5,6,7,8,9,10].map(function(n){return '<button data-a="rpe" data-n="'+n+'" aria-pressed="'+(formRpe===n)+'">'+n+'</button>'}).join('')+'</div></div>'+
-   '<div><label class="lab" for="ln">Notes</label><textarea class="in" id="ln" placeholder="How did it feel? Anything to change?">'+esc(l.note||'')+'</textarea></div>'+
-   '<button class="btn" data-a="save" data-d="'+d+'">'+(isDone(d)?'Update log':'Mark done and save')+'</button>'+
-   (S.logs[d]?'<button class="btn ghost small" data-a="undo" data-d="'+d+'">Clear log</button>':'')+'</div>';
+   '<div><label class="lab" for="ln">Notes</label><textarea class="in" id="ln" placeholder="How did it feel?">'+esc(l.note||'')+'</textarea></div>'+
+   '<div class="acts"><button class="play" data-a="save" data-d="'+d+'" aria-label="'+(isDone(d)?'Update log':'Mark done and save')+'">'+ic('check',30)+'</button>'+
+   (S.logs[d]?'<button class="rnd" data-a="undo" data-d="'+d+'" aria-label="Clear log">'+ic('x',24)+'</button>':'')+'</div></div>';
   return out;
 }
 function numOf(v){var n=parseFloat(String(v||'').replace(/[^0-9.]/g,''));return isNaN(n)?0:n}
@@ -890,7 +984,7 @@ function blockSteps(s){
     if(/^(Set up|Pacing|Fuel|Before|Optional)$/.test(nm))return; // prep and advice, not timed steps
     b[1].forEach(function(line,li){
       var orig=s.ob?s.ob[bi][1][li]:line;
-      st.push({n:line.split(/ @ |, rest| rest |\(/)[0].slice(0,44),k:'work',d:line,o:orig});
+      st.push({n:line.split(/ @ |, rest| rest |\(/)[0].split(/ \d+ × | \d+ (?:min|sets) /)[0].slice(0,44),k:'work',d:line,o:orig});
       var rm=line.match(/rest (\d+) (s|min)/),r=rm?(rm[2]==='min'?rm[1]*60:+rm[1]):((nm==='Strength'||nm==='Sled')?90:0);
       if(r>0)st.push(restS(r));
     });
@@ -1030,27 +1124,18 @@ function subline(st){
 function workoutScreen(){
   var s=SESS[W.d],st=W.steps[W.i],nx=W.steps[W.i+1],isRest=st.k==='rest',e=elStep();
   var big=isRest?fmtT(Math.ceil(Math.max(0,st.rest-e))):fmtT(Math.floor(e));
-  var last=W.i===W.steps.length-1;
-  var out='<div class="wo-top"><div><div class="eyebrow">'+esc(s.title)+'</div><div class="t num" id="wTotal">'+fmtT(Math.floor(elTotal()))+'</div></div><div class="muted num">Step '+(W.i+1)+' of '+W.steps.length+'</div></div>'+
-   '<div class="bar"><i style="width:'+Math.round(W.i/W.steps.length*100)+'%"></i></div><div class="sp"></div>'+
-   '<div class="card wo-card'+(isRest?' rest':'')+'">'+stepChip(st.k)+'<h2>'+esc(st.n)+qBtn(st.o||st.d||st.n)+'</h2><div class="muted">'+esc(subline(st))+'</div>'+
+  var last=W.i===W.steps.length-1,canAlt=st.k==='work'&&st.o&&altFor(st.o);
+  var out='<div class="wtop"><button class="rnd sm" data-a="wend" aria-label="End workout">'+ic('x',20)+'</button>'+
+   '<div class="wmid"><b class="num" id="wTotal">'+fmtT(Math.floor(elTotal()))+'</b><small>'+(W.i+1)+' of '+W.steps.length+'</small></div>'+
+   (qBtn(st.o||st.d||st.n)||'<span class="qmsp"></span>').replace('class="qm"','class="rnd sm"')+'</div>'+
+   '<div class="wbar"><i style="width:'+Math.round(W.i/W.steps.length*100)+'%"></i></div>'+
+   '<div class="wc'+(isRest?' rest':'')+'"><h2>'+esc(st.n)+'</h2><div class="wd2">'+esc(subline(st))+'</div>'+
    '<div class="wo-time" id="wBig">'+big+'</div><div class="wo-tgt">'+esc(stepTgt(st))+'</div>'+
-   '<div id="wDelta">'+deltaHtml(st,e)+'</div>'+(W.paused?'<div><span class="wo-delta">Paused</span></div>':'')+'</div>';
-  if(nx){
-    out+='<div class="card nextc">'+stepChip(nx.k)+'<span class="mid"><small>Up next</small><b>'+esc(nx.n)+'</b><span class="muted">'+esc(nx.k==='rest'?fmtT(nx.rest)+' recovery':(stepTgt(nx)||nx.d||''))+'</span></span></div>';
-  }else{
-    out+='<div class="card nextc"><span class="mid"><small>Up next</small><b>Finish and see your analysis</b></span></div>';
-  }
-  var done=W.res.filter(function(r){return r[1]!=='rest'}).slice(-3).reverse();
-  if(done.length){
-    out+='<div class="sec"><h2>Just done</h2></div><div class="card">'+done.map(function(r){
-      var dl=r[3]?r[2]-r[3]:null;
-      return '<div class="tr4" style="grid-template-columns:minmax(0,1.6fr) minmax(0,.8fr) minmax(0,.8fr)"><span>'+esc(r[0])+'</span><span class="num">'+fmtT(r[2])+'</span><span class="num '+(dl==null?'':(dl>0?'over':'under'))+'">'+(dl==null?'':(dl>0?'+':'-')+fmtT(Math.abs(dl)))+'</span></div>';
-    }).join('')+'</div>';
-  }
-  var canAlt=st.k==='work'&&st.o&&altFor(st.o);
-  out+='<div class="wo-btns"><button class="btn big" data-a="wnext">'+(isRest?'Skip rest':(last?'Finish workout':'Done, next'))+'</button>'+
-   '<div class="pair"><button class="btn ghost small" data-a="wpause">'+(W.paused?'Resume':'Pause')+'</button><button class="btn ghost small" data-a="wend">'+'End workout'+'</button></div>'+(canAlt?'<button class="btn ghost small" data-a="walt">Swap exercise</button>':'')+'</div>';
+   '<div id="wDelta">'+deltaHtml(st,e)+'</div>'+(W.paused?'<div class="wpaused">Paused</div>':'')+'</div>';
+  out+='<div class="wnext">'+(nx?'<span class="ni">'+ic(nx.k==='rest'?'moon':'chevR',18)+'</span><span><span class="muted">Next </span><b>'+esc(nx.k==='rest'?'Rest '+fmtT(nx.rest):nx.n)+'</b></span>':'<span class="ni">'+ic('flag',18)+'</span><span><b>Last step</b></span>')+'</div>';
+  out+='<div class="wctl">'+(canAlt?'<button class="rnd" data-a="walt" aria-label="Swap exercise">'+ic('swap',26)+'</button>':'<span class="rndsp"></span>')+
+   '<button class="play xl" data-a="wnext" aria-label="'+(isRest?'Skip rest':(last?'Finish workout':'Done, next'))+'">'+ic('check',48)+'</button>'+
+   '<button class="rnd" data-a="wpause" aria-label="'+(W.paused?'Resume':'Pause')+'">'+ic(W.paused?'play':'pause',26)+'</button></div>';
   return out;
 }
 function analyse(w){
@@ -1092,31 +1177,29 @@ function tipsFor(a,s,w){
 }
 function analysisScreen(d){
   var s=SESS[d],l=S.logs[d],w=l&&l.w;
-  if(!w)return '<button class="back" data-a="open" data-d="'+d+'">‹ Back</button><div class="card">No workout recorded for this day yet.</div>';
+  if(!w)return '<button class="iback" data-a="open" data-d="'+d+'" aria-label="Back">'+ic('chevL',22)+'</button><div class="card">No workout recorded for this day yet.</div>';
   var a=analyse(w),isSim=!!(s.p&&s.p.k==='sim');
-  var out='<button class="back" data-a="open" data-d="'+d+'">‹ Session</button>'+
-   '<div class="card hero">'+chip(s.t)+'<h2>'+esc(s.title)+'</h2><div class="when">'+esc(fmtD(d))+(w.part?' · ended early':'')+'</div>'+
-   '<div class="stats"><div class="stat"><small>Total time</small><b class="bigtime">'+fmtT(w.total)+'</b></div><div class="stat"><small>Planned</small><b class="num">'+s.min+' min</b></div>'+
-   (a.avgPace?'<div class="stat"><small>Avg run pace</small><b class="num">'+fmtT(a.avgPace)+'</b></div>':'')+'</div></div>';
+  var diff=Math.round(w.total-s.min*60),under=diff<=0;
+  var out='<button class="iback" data-a="open" data-d="'+d+'" aria-label="Back">'+ic('chevL',22)+'</button>'+
+   '<div class="sumh"><small>'+esc(s.title)+(w.part?' · ended early':'')+'</small><div class="sumt"><b class="num">'+fmtT(w.total)+'</b>'+(w.part?'':'<span class="'+(under?'under':'over')+'">'+fmtT(Math.abs(diff))+(under?' under plan':' over plan')+'</span>')+'</div></div>';
   if(a.runs.length||a.stn.length){
-    out+='<div class="sec"><h2>Race estimate</h2></div>'+forecastCard(forecast({skip:d}).total);
+    var f0=forecast({skip:d}).total,f1=forecast().total;
+    out+='<button class="frow" data-a="fc" aria-label="Open race forecast"><span class="fi">'+ic('trend',20)+'</span><span class="fm"><small>Race forecast</small><b class="num">'+fmtT(f0)+' → '+fmtT(f1)+'</b></span>'+ic('chevR',20)+'</button>';
   }
-  var rows=w.res.map(function(r){return r});
-  out+='<div class="sec"><h2>Splits</h2></div><div class="card"><div class="tr4 head"><span>Step</span><span>Actual</span><span>Target</span><span>Diff</span></div>'+
-   a.res.map(function(r){
-     var soft=(r.k==='rest'||r.k==='warm'||r.k==='cool');
-     var dl=(r.tgt&&!soft)?r.act-r.tgt:null;
-     return '<div class="tr4'+(soft?' soft':'')+'"><span>'+esc(r.n)+'</span><span class="num">'+fmtT(r.act)+'</span><span class="num">'+(r.tgt?fmtT(r.tgt):'')+'</span><span class="num '+(dl==null?'':(dl>0?'over':'under'))+'">'+(dl==null?'':(dl>0?'+':'-')+fmtT(Math.abs(dl)))+'</span></div>';
-   }).join('')+'</div>';
-  var lost=a.res.filter(function(r){return r.tgt&&(r.k==='run'||r.k==='stn'||r.k==='work'||r.k==='seg')&&r.act-r.tgt>8}).sort(function(x,y){return (y.act-y.tgt)-(x.act-x.tgt)}).slice(0,3);
-  if(lost.length){
-    out+='<div class="sec"><h2>Where you lost time</h2></div><div class="card">'+lost.map(function(r){return '<div class="tr4" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)"><span>'+esc(r.n)+'</span><span class="num over">+'+fmtT(r.act-r.tgt)+'</span></div>'}).join('')+'</div>';
+  var rows=a.res.filter(function(r){return r.k!=='rest'&&r.k!=='warm'&&r.k!=='cool'&&r.act>0});
+  if(rows.length){
+    var mx=Math.max.apply(null,rows.map(function(r){return r.act}));
+    out+='<div class="card bars">'+rows.map(function(r){
+      var over=r.tgt&&r.act-r.tgt>8;
+      return '<div class="brow"><span class="bn">'+esc(r.n)+'</span><span class="bt"><i class="'+(over?'bad':'')+'" style="width:'+Math.max(4,Math.round(r.act/mx*100))+'%"></i></span><span class="bv num'+(over?' over':'')+'">'+fmtT(r.act)+'</span></div>';
+    }).join('')+'</div>';
   }
-  out+='<div class="sec"><h2>Coach tips</h2></div><div>'+tipsFor(a,s,w).map(function(t){return '<div class="tipc"><b>'+esc(t[0])+'</b>'+esc(t[1])+'</div>'}).join('')+'</div>';
+  var tips=tipsFor(a,s,w);
+  if(tips.length)out+='<div class="tip1"><span class="ti">'+ic('bulb',22)+'</span><div><b>'+esc(tips[0][0])+'.</b> '+esc(tips[0][1])+'</div></div>';
   if(isSim)out+=paceGuide();
-  out+='<div class="sec"><h2>How hard was it?</h2></div><div class="card form"><div class="rpe">'+
-   [1,2,3,4,5,6,7,8,9,10].map(function(n){return '<button data-a="rpe" data-n="'+n+'" aria-pressed="'+(formRpe===n)+'">'+n+'</button>'}).join('')+'</div>'+
-   '<button class="btn" data-a="anclose">Save and close</button></div>';
+  out+='<div class="sumf"><div class="sumr"><span class="lab">Effort</span><div class="rpe">'+
+   [1,2,3,4,5,6,7,8,9,10].map(function(n){return '<button data-a="rpe" data-n="'+n+'" aria-pressed="'+(formRpe===n)+'">'+n+'</button>'}).join('')+'</div></div>'+
+   '<button class="play" data-a="anclose" aria-label="Save and close">'+ic('check',30)+'</button></div>';
   return out;
 }
 function swapScreen(src){
@@ -1180,11 +1263,10 @@ function confLabel(f){
 function forecastCard(before){
   var f=forecast(),tg=targetSec(),gap=f.total-tg;
   var pct=Math.max(8,Math.min(100,Math.round(tg/f.total*100)));
-  var foot=before!=null?'<span>Was <b class="num">'+fmtT(before)+'</b> before this workout</span><span><b class="num">'+(f.total<=before?'-'+fmtT(before-f.total):'+'+fmtT(f.total-before))+'</b></span>'
-    :'<span><b class="num">'+(gap>0?fmtT(gap)+' to find':fmtT(-gap)+' ahead')+'</b></span><span>'+(f.count?'Based on '+f.count+' workout'+(f.count===1?'':'s'):'From your starting times')+'</span>';
-  return '<button class="fc" data-a="fc" aria-label="Open race forecast"><div class="fc-top"><span class="fc-lab">Race forecast</span><span class="fc-hint">Details ›</span></div>'+
-   '<div class="fc-cols"><div><small>Estimate</small><b class="num">'+fmtT(f.total)+'</b></div><div><small>Target</small><b class="num fc-acc">'+fmtT(tg)+'</b></div></div>'+
-   '<div class="fc-bar"><i style="width:'+pct+'%"></i></div><div class="fc-foot">'+foot+'</div></button>';
+  var sub=gap>0?fmtT(gap)+' to find':fmtT(-gap)+' ahead';
+  return '<button class="fc" data-a="fc" aria-label="Open race forecast"><div class="fc-top"><span class="fc-lab">Race forecast</span><span class="fc-hint">'+ic('chevR',20)+'</span></div>'+
+   '<div class="fc-cols"><div><b class="num">'+fmtT(f.total)+'</b><small>Estimate · '+esc(sub)+'</small></div><div class="fct"><b class="num fc-acc">'+fmtT(tg)+'</b><small>Target</small></div></div>'+
+   '<div class="fc-bar"><i style="width:'+pct+'%"></i></div></button>';
 }
 function spark(h,tg){
   if(h.length<2)return '<p class="muted" style="margin:0">The trend line appears after your second workout with timed splits.</p>';
@@ -1263,7 +1345,7 @@ function render(){
   else h=raceScreen();
   document.getElementById('app').innerHTML=h;
   document.getElementById('nav').innerHTML=NAV.map(function(n){
-    return '<button data-a="tab" data-v="'+n[0]+'"'+(n[0]===tab&&!mode?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+n[2]+'</svg>'+n[1]+'</button>';
+    return '<button data-a="tab" data-v="'+n[0]+'"'+(n[0]===tab&&!mode?' aria-current="page"':'')+'>'+ic(n[2],24)+n[1]+'</button>';
   }).join('');
   var nv=document.querySelector('nav');if(nv)nv.style.display=(mode==='workout')?'none':'';
 }
