@@ -206,6 +206,65 @@ nav button[aria-current="page"] svg{stroke:var(--ink)}
 #auth button{font:inherit;font-weight:600;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
 #auth button.pri{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 #auth small{color:var(--ink2);min-height:1.2em}
+
+/* ---------- polish layer: depth, materials, press feedback, type ---------- */
+:root{--shadow-1:0 1px 2px rgba(17,18,20,.05),0 6px 18px -8px rgba(17,18,20,.14);--shadow-2:0 2px 4px rgba(17,18,20,.06),0 16px 36px -14px rgba(17,18,20,.28);--glass:rgba(255,255,255,.8);--glass-edge:rgba(255,255,255,.7);--ease-out:cubic-bezier(.22,1,.36,1)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--shadow-1:0 1px 2px rgba(0,0,0,.4),0 8px 22px -10px rgba(0,0,0,.6);--shadow-2:0 2px 4px rgba(0,0,0,.45),0 18px 40px -16px rgba(0,0,0,.75);--glass:rgba(23,25,28,.82);--glass-edge:rgba(255,255,255,.09)}}
+:root[data-theme="dark"]{--shadow-1:0 1px 2px rgba(0,0,0,.4),0 8px 22px -10px rgba(0,0,0,.6);--shadow-2:0 2px 4px rgba(0,0,0,.45),0 18px 40px -16px rgba(0,0,0,.75);--glass:rgba(23,25,28,.82);--glass-edge:rgba(255,255,255,.09)}
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;touch-action:manipulation;overscroll-behavior-y:none}
+/* type: tighter tracking as size grows */
+.wo-time{letter-spacing:-.02em}
+.total b,.bigtime{letter-spacing:-.025em}
+.fc-cols b,.bt2{letter-spacing:-.02em}
+.fc-cols b{font-size:clamp(30px,10.4vw,46px);white-space:nowrap}
+.fc-cols>div{min-width:0}
+.hero h2,.wo-card h2{letter-spacing:-.005em}
+.num,.wo-time,.total b,.bigtime,.bt2,.fc-cols b,.count b,.stat b{font-variant-numeric:tabular-nums}
+/* depth */
+.card,.row,.wk,.day{box-shadow:var(--shadow-1);border-color:color-mix(in srgb,var(--line) 70%,transparent)}
+.card{border-radius:20px}
+.row{border-radius:16px}
+.wk{border-radius:20px}
+.hero{box-shadow:var(--shadow-2)}
+.count{box-shadow:0 8px 22px -10px color-mix(in srgb,var(--accent) 80%,transparent)}
+.stat{background:color-mix(in srgb,var(--surface2) 80%,transparent)}
+.row .tag{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 22%,transparent)}
+/* race forecast: the hero panel */
+.fc{position:relative;overflow:hidden;border-radius:24px;padding:18px 18px 16px;border-color:transparent;box-shadow:var(--shadow-2),inset 0 1px 0 rgba(255,255,255,.07);background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--fc-acc) 16%,transparent) 0%,transparent 55%),linear-gradient(180deg,color-mix(in srgb,var(--fc-bg) 92%,#fff) 0%,var(--fc-bg) 100%)}
+.fc-bar{height:10px;box-shadow:inset 0 1px 2px rgba(0,0,0,.35)}
+.fc-bar i{box-shadow:0 0 14px color-mix(in srgb,var(--fc-acc) 55%,transparent)}
+/* buttons */
+.btn{border-radius:16px;box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 8px 18px -10px color-mix(in srgb,var(--accent) 90%,#000)}
+.btn.ghost{box-shadow:none}
+.btn.big{border-radius:20px}
+.chips button,.rpe button{transition:background-color .2s var(--ease-out),transform .2s var(--ease-out)}
+/* press feedback: instant on pointer down, springs back on release */
+.btn,.row,.fc,.day,.wkh,nav button,.chips button,.rpe button,.back{transition:transform .35s var(--ease-out),background-color .2s var(--ease-out),box-shadow .2s var(--ease-out);will-change:transform}
+.btn:active,.row:active,.fc:active,.day:active,.chips button:active,.rpe button:active{transform:scale(.97);transition-duration:.08s}
+.wkh:active{background:var(--surface2);transition-duration:.05s}
+nav button:active{transform:scale(.92);transition-duration:.08s}
+.back:active{opacity:.6}
+/* floating translucent tab bar */
+nav{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border-top:1px solid var(--glass-edge);box-shadow:0 -10px 30px -18px rgba(0,0,0,.25)}
+nav button[aria-current="page"]{background:color-mix(in srgb,var(--ink) 9%,transparent)}
+#toast{background:var(--glass);color:var(--ink);-webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);border:1px solid var(--glass-edge);box-shadow:var(--shadow-2);transition:opacity .25s var(--ease-out),transform .35s var(--ease-out);transform:translate(-50%,8px)}
+#toast.on{transform:translate(-50%,0)}
+/* inputs */
+.in{border-radius:14px;background:var(--surface);transition:border-color .2s,box-shadow .2s}
+.in:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 45%,transparent)}
+/* auth: glass card over a soft accent glow */
+#auth{background:radial-gradient(90% 60% at 50% 0%,color-mix(in srgb,var(--accent) 28%,transparent),transparent 70%),var(--bg)}
+#auth .box{padding:26px 22px;border-radius:28px;background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--glass-edge);box-shadow:var(--shadow-2);gap:12px}
+#auth h1{font-size:54px;letter-spacing:-.01em;text-transform:uppercase}
+#auth input{border-radius:14px;font-size:16px}
+#auth button{border-radius:14px;min-height:48px;transition:transform .35s var(--ease-out)}
+#auth button:active{transform:scale(.97);transition-duration:.08s}
+#auth button.pri{box-shadow:0 8px 18px -10px color-mix(in srgb,var(--accent) 90%,#000)}
+/* accessibility */
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}.btn:active,.row:active,.fc:active,.day:active,nav button:active{transform:none}#toast{transform:translateX(-50%)}}
+@media (prefers-reduced-transparency:reduce){nav,#toast,#auth .box{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--surface)}}
+@media (prefers-contrast:more){.card,.row,.wk,.day,nav{border-color:var(--ink)}}
 </style>
 </head>
 <body>
