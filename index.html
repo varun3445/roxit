@@ -466,7 +466,7 @@ nav button{font-family:var(--body);font-weight:600;font-size:.7rem;letter-spacin
 (function(){
 'use strict';
 /* ---------- date helpers ---------- */
-var RACE='2026-12-06';
+var RACE='2026-12-05';
 var DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function pad(n){return String(n).padStart(2,'0')}
@@ -615,14 +615,14 @@ wk('2026-11-30',[
  SM('Primer strength',35,'Light, race loads only',[152,103],['Back squat 3 × 3 @ RPE 6','Romanian deadlift 2 × 5','Split squat 2 × 5 each leg','Sled push 2 × 12.5 m @ 152 kg total','Sled pull 2 × 25 m @ 103 kg total'],'Stay loose and keep the technique sharp.'),
  R('Race pace primer',40,'3 × 1 km @ 5:40/km',['3 × 1 km @ 5:40/km','2 min easy jog between'],'Nothing hard. Feel the pace.'),
  W('Station primer',30,'Short and sweet',['15 min easy jog','3 × 10 wall balls','2 × 4 burpee broad jumps','500 m ski or row easy'],'Stop when it feels good.'),
- E(20,'6:45','Short and easy. Pack your race bag tonight.'),
- OFF('Early night. Lay out kit, shoes, gel, water. Check the venue, start time and wave.'),
- mk('run','Shakeout',20,'15 min jog + 4 strides',[['Main set',['15 min very easy','4 × 15 s strides']]],'Eat well, hydrate, sleep.',FE),
+ OFF('Rest and an early night. Lay out kit, shoes, gel, water. Check the venue, start time and wave.'),
+ mk('run','Shakeout',20,'15 min jog + 4 strides',[['Main set',['15 min very easy','4 × 15 s strides']]],'Eat well, hydrate, sleep. Pack your race bag tonight.',FE),
  mk('race',"Hyrox London, Men's Open",90,'8 × 1 km + 8 stations',[
    ['Before',['Carb heavy meal 2 to 3 hours before','Arrive early, walk the course, check your sled lane and rope']],
    ['Pacing',['Run 1 at 6:10/km, then 5:55 to 6:05/km','Push and pull: steady, short steps, no sprint start','Wall balls: planned sets, short breaks, no failing early']],
    ['Fuel',['Gel or chews after the row (station 5)','Sip water at each transition']]],
-   'Trust the training. Go out easy, finish strong.',[['Finish time',''],['Slowest station',''],['Notes','']])
+   'Trust the training. Go out easy, finish strong.',[['Finish time',''],['Slowest station',''],['Notes','']]),
+ OFF('You raced. Walk, eat well and enjoy it.')
 ]);
 
 /* Guided workout descriptors, attached to the original sessions */
@@ -637,7 +637,7 @@ P('2026-10-31',{k:'sim',mode:'each',km:1,pace:'5:55',rest:0,st:[sa('ski',1,'SkiE
 P('2026-11-14',{k:'sim',mode:'each',km:1,pace:'5:55',rest:0,pre:{km:2,pace:'6:00'},st:[sa('row',1,'Row 1000 m'),sa('farm',1,'Farmers carry 200 m'),sa('lunge',1,'Sandbag lunges 100 m'),sa('wb',1,'Wall balls 100')]});
 P('2026-11-21',{k:'sim',mode:'each',km:1,pace:'5:55',rest:0,full:true,st:FULL});
 P('2026-11-28',{k:'sim',mode:'each',km:1,pace:'5:50',rest:60,st:[sa('push',.5,'Sled push 25 m @ 152 kg'),sa('pull',.5,'Sled pull 25 m @ 103 kg'),sa('wb',.3,'Wall balls 30'),sa('farm',.5,'Farmers carry 100 m')]});
-P('2026-12-06',{k:'sim',mode:'each',km:1,pace:'5:55',rest:0,race:true,st:FULL});
+P('2026-12-05',{k:'sim',mode:'each',km:1,pace:'5:55',rest:0,race:true,st:FULL});
 P('2026-11-03',{k:'tt',label:'5K time trial',km:5,tgt:'27:30'});
 P('2026-11-08',{k:'tt',label:'10K time trial',km:10,tgt:'57:00'});
 P('2026-11-04',{k:'tt',label:'100 wall balls',tgt:'9:30',key:'wb'});
@@ -864,7 +864,7 @@ function whenLabel(d){
 function topBlock(){
   var left=diffDays(TODAY,RACE);
   var cd=left>0?left:(left===0?0:null);
-  return '<div class="topl"><span>Hyrox London · 6 Dec</span><span class="acc">'+(cd==null?'Race run':(cd===1?'1 day':cd+' days'))+'</span></div>';
+  return '<div class="topl"><span>Hyrox London · 5 Dec</span><span class="acc">'+(cd==null?'Race run':(cd===1?'1 day':cd+' days'))+'</span></div>';
 }
 function todayScreen(){
   var out=topBlock();
@@ -960,7 +960,7 @@ function raceOut(){
 }
 function raceScreen(){
   var r=S.race;
-  var out='<div class="top"><div><div class="eyebrow">Sunday 6 December</div><h1>Race plan</h1></div></div>'+
+  var out='<div class="top"><div><div class="eyebrow">Saturday 5 December</div><h1>Race plan</h1></div></div>'+
    '<div class="card total" id="raceTotal">'+raceOut()+'</div>'+
    '<div class="sec"><h2>Your splits</h2></div><div class="pair" style="margin-bottom:12px"><button class="btn small'+(r.preset==='target'?'':' ghost')+'" data-a="preset" data-p="target">Target 94:25</button><button class="btn small'+(r.preset==='stretch'?'':' ghost')+'" data-a="preset" data-p="stretch">Stretch 88:15</button></div>'+
    '<div class="card"><div class="rp"><b>Run pace per km (×8)</b><input class="in num" data-race="pace" value="'+esc(r.pace)+'" aria-label="Run pace per km" autocomplete="off"></div>'+
@@ -1336,7 +1336,7 @@ function spark(h,tg){
 var aiText='',aiBusy=false;
 function forecastScreen(){
   var f=forecast(),tg=targetSec(),gap=f.total-tg,k=tg/(GOAL_PACE*8+GOAL_ST+GOAL_ROX),c=f.c;
-  var out='<button class="back" data-a="back">‹ Back</button><div class="top"><div><div class="eyebrow">Sunday 6 December</div><h1>Race forecast</h1></div></div>'+
+  var out='<button class="back" data-a="back">‹ Back</button><div class="top"><div><div class="eyebrow">Saturday 5 December</div><h1>Race forecast</h1></div></div>'+
    '<div class="card total"><div class="pair" style="text-align:center"><div><span class="lab">Estimate</span><span class="bt2">'+fmtT(f.total)+'</span></div><div><span class="lab">Target</span><span class="bt2">'+fmtT(tg)+'</span></div></div>'+
    '<span class="delta'+(gap<=0?' good':'')+'">'+(gap>0?fmtT(gap)+' to find':fmtT(-gap)+' ahead of target')+'</span>'+
    '<p class="muted" style="margin:12px 0 0;font-size:13px">'+esc(confLabel(f))+(f.count?' · '+f.count+' workout'+(f.count===1?'':'s')+' counted':' · log a sim or time trial to sharpen it')+'</p></div>';
@@ -1375,7 +1375,7 @@ function askAI(){
   if(aiBusy)return;
   var f=forecast(),tg=targetSec(),c=f.c;
   var parts=STN.map(function(x){return x[1]+' '+fmtT(Math.round(c.st[x[0]]))+(f.meas.st[x[0]]?'':' (guess)')}).join(', ');
-  var prompt='You are a direct, friendly Hyrox coach. The athlete races Hyrox London Men\'s Open on 6 December 2026 and wants '+fmtT(tg)+'. Their current estimated finish is '+fmtT(f.total)+', based on '+f.count+' logged workouts. Run pace estimate '+fmtT(Math.round(c.pace))+' per km. Station estimates: '+parts+'. Write a short read of at most 90 words: where the most time is, and the one thing to prioritise this week. Plain text, no bullet points, no dashes.';
+  var prompt='You are a direct, friendly Hyrox coach. The athlete races Hyrox London Men\'s Open on 5 December 2026 and wants '+fmtT(tg)+'. Their current estimated finish is '+fmtT(f.total)+', based on '+f.count+' logged workouts. Run pace estimate '+fmtT(Math.round(c.pace))+' per km. Station estimates: '+parts+'. Write a short read of at most 90 words: where the most time is, and the one thing to prioritise this week. Plain text, no bullet points, no dashes.';
   aiBusy=true;aiText='';render();
   fetch('/api/coach',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({prompt:prompt})})
     .then(function(r){return r.json()})
