@@ -320,6 +320,22 @@ nav button{font-size:.78rem;letter-spacing:.07em}
 .altTag{display:inline-block;margin-left:.4rem;padding:.05rem .45rem;border-radius:999px;background:color-mix(in srgb,var(--accent) 35%,transparent);font-family:var(--display);font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;vertical-align:middle}
 .blk li::marker{color:var(--ink2)}
 .wo-btns .btn.ghost.small{width:100%}
+
+.qm{display:inline-grid;place-items:center;width:28px;height:28px;margin-left:.35rem;border-radius:50%;color:var(--ink2);vertical-align:middle;transition:transform .35s var(--ease-out),background-color .2s}
+.qm svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.qm:active{transform:scale(.88);background:var(--surface2);transition-duration:.08s}
+.wo-card h2 .qm{width:34px;height:34px}
+#sheet{position:fixed;inset:0;z-index:40;pointer-events:none}
+#sheet.on{pointer-events:auto}
+.sheetbd{position:absolute;inset:0;background:rgba(0,0,0,.35);opacity:0;animation:fadein .25s var(--ease-out) forwards}
+.sheetbox{position:absolute;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;background:color-mix(in srgb,var(--surface) 95%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--glass-edge);border-radius:24px 24px 0 0;padding:18px 20px calc(24px + env(safe-area-inset-bottom,0px));box-shadow:var(--shadow-2);transform:translateY(100%);animation:sheetup .4s var(--ease-out) forwards}
+.sheeth{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.sheeth b{font-family:var(--display);font-weight:800;font-size:1.4rem;text-transform:uppercase}
+.sheetbox p{margin:0;line-height:1.5}
+@keyframes fadein{to{opacity:1}}
+@keyframes sheetup{to{transform:none}}
+@media (prefers-reduced-motion:reduce){.sheetbox{transform:none;animation:none}.sheetbd{opacity:1;animation:none}}
+@media (prefers-reduced-transparency:reduce){.sheetbox{background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none}}
 </style>
 </head>
 <body>
@@ -328,6 +344,7 @@ nav button{font-size:.78rem;letter-spacing:.07em}
 <input id="authPw" type="password" placeholder="Password" autocomplete="current-password">
 <button class="pri" id="authIn">Sign in</button><button id="authUp">Create account</button><button id="authSkip">Use without syncing</button><small id="authMsg"></small></div></div>
 <div id="app"></div>
+<div id="sheet"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <nav aria-label="Sections"><div id="nav"></div></nav>
 
@@ -540,6 +557,29 @@ function sessEff(d){
   return c;
 }
 
+
+/* ---------- plain-English tooltips ---------- */
+var GLOSS=[
+ [/strides?/i,'Strides','Short, smooth, fast bursts of 15 to 20 seconds. Run at about 85 to 90% of sprint speed, tall and relaxed, never all out. Walk or jog back until you feel fully recovered (about 45 to 60 s). They sharpen leg speed and running form without making you tired.'],
+ [/hand over hand/i,'Hand over hand','Sled pull technique: sit back, feet planted, and pull the rope in with alternating hands, one over the other. Do not walk backwards while pulling.'],
+ [/^Sled push/i,'Sled push','Hips low, arms straight, short fast steps. Keep driving and do not stand up between steps.'],
+ [/^Sled pull/i,'Sled pull','Sit back with your feet planted and pull the rope in, hand over hand. Keep your chest up and do not walk backwards.'],
+ [/^Wall balls?/i,'Wall balls','Squat holding the ball at your chest, stand and throw it to the target (3 m for Men\'s Open, 6 kg ball). Catch it and go straight into the next squat. Break sets early rather than failing late.'],
+ [/^Burpee broad jumps?/i,'Burpee broad jumps','Chest to the floor, stand, then jump forward as far as you can with both feet. Land softly and go straight into the next burpee. Stepping up instead of jumping is fine when tired.'],
+ [/^Farmers carry/i,'Farmers carry','Walk with a heavy weight in each hand. Stand tall, shoulders back, quick short steps.'],
+ [/conversational|nose breathing/i,'Conversational pace','Easy enough to speak full sentences. If you cannot, slow down. Easy days build the aerobic base that decides most of your race.'],
+ [/RPE/,'RPE','Rate of perceived effort from 1 (very easy) to 10 (maximum). RPE 7 means hard but you could do about 3 more reps.']
+];
+function glossFor(t){for(var i=0;i<GLOSS.length;i++)if(GLOSS[i][0].test(t||''))return i;return -1}
+var QM='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>';
+function qBtn(t){var i=glossFor(t);return i<0?'':'<button class="qm" data-a="gl" data-g="'+i+'" aria-label="What is '+esc(GLOSS[i][1])+'?">'+QM+'</button>'}
+function showGloss(i){
+  var g=GLOSS[i],el=document.getElementById('sheet');if(!g||!el)return;
+  el.innerHTML='<div class="sheetbd" data-a="glx"></div><div class="sheetbox" role="dialog" aria-label="'+esc(g[1])+'"><div class="sheeth"><b>'+esc(g[1])+'</b><button class="qm" data-a="glx" aria-label="Close">&#10005;</button></div><p>'+esc(g[2])+'</p></div>';
+  el.className='on';
+}
+function hideGloss(){var el=document.getElementById('sheet');if(el){el.className='';el.innerHTML=''}}
+
 var WEEKS=[
  {n:0,name:'Primer',phase:'Get set',start:'2026-10-08',end:'2026-10-11'},
  {n:1,name:'Base',phase:'Learn the kit',start:'2026-10-12'},
@@ -712,7 +752,7 @@ function sessionScreen(d){
    '<div class="stats"><div class="stat"><small>Duration</small><b class="num">'+s.min+' min</b></div><div class="stat" style="grid-column:span 2"><small>Headline</small><b>'+esc(s.head)+'</b></div></div>'+
    s.blocks.map(function(b,bi){return '<div class="blk"><h3>'+esc(b[0])+'</h3><ul>'+b[1].map(function(x,li){
      var can=altFor(x)&&s.t!=='sim'&&s.t!=='rest'&&!(s.p&&s.p.k==='sim'),sw=can&&altIdx(s,x)>0;
-     return '<li>'+esc(can?effLine(s,x):x)+(sw?' <span class="altTag">Alternative</span>':'')+(can?'<button class="altb" data-a="alt" data-d="'+d+'" data-b="'+bi+'" data-l="'+li+'">'+(sw?'Next option':'Swap exercise')+'</button>':'')+'</li>'}).join('')+'</ul></div>'}).join('')+
+     return '<li>'+esc(can?effLine(s,x):x)+(sw?' <span class="altTag">Alternative</span>':'')+qBtn(x)+(can?'<button class="altb" data-a="alt" data-d="'+d+'" data-b="'+bi+'" data-l="'+li+'">'+(sw?'Next option':'Swap exercise')+'</button>':'')+'</li>'}).join('')+'</ul></div>'}).join('')+
    (s.note?'<div class="note"><b>Coach note</b>'+esc(s.note)+'</div>':'')+'</div>';
   if(s.t!=='rest'){
     out+='<div class="sec"><h2>Workout</h2></div><div class="card form">'+
@@ -883,6 +923,17 @@ function buildSteps(s){
     }
     var m2=s.head.match(/(\d+) min @ ([0-9:]+)/);
     if(m2)return [{n:s.title,k:'seg',tgt:m2[1]*60,d:m2[1]+' min @ '+m2[2]+'/km'}];
+    var sl=null,em=null;
+    s.blocks.forEach(function(b){b[1].forEach(function(l){var a=l.match(/(\d+) × (\d+) s strides/),c=l.match(/^(\d+) min easy/);if(a&&!sl)sl=a;if(c&&!em)em=c})});
+    if(sl&&em){
+      var reps2=+sl[1],secs=+sl[2];
+      st.push({n:'Easy run',k:'seg',tgt:em[1]*60,d:em[1]+' min easy, conversational pace'});
+      for(var j=0;j<reps2;j++){
+        st.push({n:'Stride '+(j+1)+' of '+reps2,k:'work',d:secs+' s smooth and fast, not a sprint'});
+        if(j<reps2-1)st.push(restS(45));
+      }
+      return st;
+    }
     return [{n:s.title,k:'seg',tgt:s.min*60,d:s.head}];
   }
   return blockSteps(s);
@@ -982,7 +1033,7 @@ function workoutScreen(){
   var last=W.i===W.steps.length-1;
   var out='<div class="wo-top"><div><div class="eyebrow">'+esc(s.title)+'</div><div class="t num" id="wTotal">'+fmtT(Math.floor(elTotal()))+'</div></div><div class="muted num">Step '+(W.i+1)+' of '+W.steps.length+'</div></div>'+
    '<div class="bar"><i style="width:'+Math.round(W.i/W.steps.length*100)+'%"></i></div><div class="sp"></div>'+
-   '<div class="card wo-card'+(isRest?' rest':'')+'">'+stepChip(st.k)+'<h2>'+esc(st.n)+'</h2><div class="muted">'+esc(subline(st))+'</div>'+
+   '<div class="card wo-card'+(isRest?' rest':'')+'">'+stepChip(st.k)+'<h2>'+esc(st.n)+qBtn(st.o||st.d||st.n)+'</h2><div class="muted">'+esc(subline(st))+'</div>'+
    '<div class="wo-time" id="wBig">'+big+'</div><div class="wo-tgt">'+esc(stepTgt(st))+'</div>'+
    '<div id="wDelta">'+deltaHtml(st,e)+'</div>'+(W.paused?'<div><span class="wo-delta">Paused</span></div>':'')+'</div>';
   if(nx){
@@ -1229,6 +1280,8 @@ document.addEventListener('click',function(e){
   else if(a==='tgset'){S.targetTxt=b.dataset.v;persist();render()}
   else if(a==='askai'){askAI()}
   else if(a==='wstart'){startWorkout(b.dataset.d)}
+  else if(a==='gl'){showGloss(+b.dataset.g)}
+  else if(a==='glx'){hideGloss()}
   else if(a==='wnext'){if(W)advance()}
   else if(a==='walt'){if(W){var cs=W.steps[W.i],ss=SESS[W.d];if(cs&&cs.o){cycleAlt(ss,cs.o);W.steps=buildSteps(sessEff(W.d));W.ss=nowMs();saveActive();render()}}}
   else if(a==='alt'){var sd=SESS[b.dataset.d],ol=sd&&sd.blocks[+b.dataset.b]&&sd.blocks[+b.dataset.b][1][+b.dataset.l];if(ol){cycleAlt(sd,ol);render()}}
