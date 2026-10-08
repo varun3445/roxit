@@ -740,6 +740,7 @@ function blockSteps(s){
     var nm=b[0];
     if(nm==='Warm-up'){st.push(warmS(8));return}
     if(nm==='Cool-down'){st.push(coolS(5));return}
+    if(/^(Set up|Pacing|Fuel|Before|Optional)$/.test(nm))return; // prep and advice, not timed steps
     b[1].forEach(function(line){
       st.push({n:line.split(/ @ |, rest| rest |\(/)[0].slice(0,44),k:'work',d:line});
       var rm=line.match(/rest (\d+) (s|min)/),r=rm?(rm[2]==='min'?rm[1]*60:+rm[1]):((nm==='Strength'||nm==='Sled')?90:0);
