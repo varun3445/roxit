@@ -1334,6 +1334,12 @@ function cTotal(c){var t=c.pace*8+c.rox;STN.forEach(function(x){t+=c.st[x[0]]});
 function forecast(opt){
   opt=opt||{};
   var c=JSON.parse(JSON.stringify(BASEC)),meas={pace:false,st:{}},hist=[],used=[];
+  var bn=S.bench||{};
+  function bt(k,lo,hi){var v=parseT(bn[k]);return (v>=lo&&v<=hi)?v:0}
+  var p5=bt('5k',900,2400),p10=bt('10k',1800,5000),ps=[];
+  if(p5)ps.push(p5/5*RFAC.tt5);if(p10)ps.push(p10/10*RFAC.tt10);
+  if(ps.length){c.pace=ps.reduce(function(a,v){return a+v},0)/ps.length;meas.pace=true}
+  [['ski',1.05,180,420],['row',1.05,180,420],['wb',1.1,300,1500],['bbj',1.1,240,900]].forEach(function(x){var v=bt(x[0],x[2],x[3]);if(v){c.st[x[0]]=v*x[1];meas.st[x[0]]=true}});
   var items=[];
   Object.keys(S.logs).forEach(function(d){var l=S.logs[d];if(l&&l.w&&l.w.res&&l.w.res.length&&d!==opt.skip)items.push({d:d,w:l.w})});
   items.sort(function(a,b){return (a.w.ts||0)-(b.w.ts||0)});
@@ -1680,6 +1686,7 @@ document.addEventListener('input',function(e){
     S.bench[el.dataset.bench]=el.value;persist();
   }
 });
+document.addEventListener('focusout',function(e){var el=e.target;if(el.dataset&&el.dataset.bench&&el.value.trim())toast('Saved. Forecast updated')});
 
 resumeActive();
 render();
