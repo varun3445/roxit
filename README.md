@@ -29,15 +29,6 @@ A phone first Hyrox training app: an 8 week plan, guided workouts, and a race fo
 | AI | Anthropic API via `api/coach.js` |
 | Hosting | Vercel |
 
-## Run it
-
-1. Run `supabase/schema.sql` in your Supabase project, then set the URL and publishable key in `config.js`.
-2. Add your Vercel URL under Auth, URL Configuration.
-3. Optional: set `ANTHROPIC_API_KEY` in Vercel environment variables to enable the coach read.
-4. Import the repo in Vercel. There is no build step.
-
-For the AWS backend, follow `aws/README.md`.
-
 ## Author
 
 Designed and built by [Varun Srivathsan](https://varunsrivathsan.com).
