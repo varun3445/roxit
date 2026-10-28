@@ -481,7 +481,7 @@ input[type=date].in{min-height:46px}
 <div id="auth"><div class="box"><h1>Roxit</h1><small>Sign in to sync your training across devices.</small>
 <input id="authEmail" type="email" placeholder="Email" autocomplete="email">
 <input id="authPw" type="password" placeholder="Password" autocomplete="current-password">
-<button class="pri" id="authIn">Sign in</button><button id="authUp">Create account</button><button id="authSkip">Use without syncing</button><small id="authMsg"></small></div></div>
+<input id="authCode" inputmode="numeric" placeholder="6-digit code from your email" style="display:none"><button class="pri" id="authConfirm" style="display:none">Confirm</button><button class="pri" id="authIn">Sign in</button><button id="authUp">Create account</button><button id="authSkip">Use without syncing</button><small id="authMsg"></small></div></div>
 <div id="app"></div>
 <div id="sheet"></div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -847,35 +847,83 @@ function persist(){
   try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}
   clearTimeout(saveTimer);saveTimer=setTimeout(flush,600);
 }
+var AWSC=CFG.aws||null,tok=null;
+function jwt(t){try{return JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))}catch(e){return {}}}
+function cog(target,body){
+  return fetch('https://cognito-idp.'+AWSC.region+'.amazonaws.com/',{method:'POST',
+    headers:{'content-type':'application/x-amz-json-1.1','x-amz-target':'AWSCognitoIdentityProviderService.'+target},
+    body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.message||j.__type||'Request failed');return j})});
+}
+function setTok(a){
+  var old={};try{old=JSON.parse(localStorage.getItem('roxit.aws')||'{}')}catch(e){}
+  tok={id:a.IdToken,refresh:a.RefreshToken||old.refresh};
+  try{localStorage.setItem('roxit.aws',JSON.stringify(tok))}catch(e){}
+  var c=jwt(tok.id);user={id:c.sub,email:c.email};
+}
+function idToken(){
+  if(!tok)return Promise.reject(new Error('signed out'));
+  if(jwt(tok.id).exp*1000>Date.now()+60000)return Promise.resolve(tok.id);
+  return cog('InitiateAuth',{AuthFlow:'REFRESH_TOKEN_AUTH',ClientId:AWSC.clientId,AuthParameters:{REFRESH_TOKEN:tok.refresh}})
+    .then(function(j){setTok(j.AuthenticationResult);return tok.id},function(e){tok=null;user=null;try{localStorage.removeItem('roxit.aws')}catch(x){}showAuth(true,'Session expired, sign in again.');throw e});
+}
+function api(method,body){
+  return idToken().then(function(t){
+    return fetch(AWSC.api+'/state',{method:method,headers:{authorization:t,'content-type':'application/json'},body:body?JSON.stringify(body):undefined})
+      .then(function(r){return r.json().catch(function(){return null}).then(function(j){return {status:r.status,data:j}})});
+  });
+}
 function flush(){
-  if(!sb||!user)return;
+  if(!user)return;
   if(writing){pending=true;return}
   writing=true;
-  sb.from('tracker_state').upsert({user_id:user.id,ts:S.ts,json:S,updated_at:new Date().toISOString()})
-    .then(function(r){if(r.error)toast('Sync failed, saved on this device')},function(){})
-    .then(function(){writing=false;if(pending){pending=false;flush()}});
+  var p;
+  if(AWSC){p=api('PUT',{ts:S.ts,json:S}).then(function(r){if(r.status!==200&&r.status!==409)toast('Sync failed, saved on this device');if(r.status===409)pull()})}
+  else if(sb){p=sb.from('tracker_state').upsert({user_id:user.id,ts:S.ts,json:S,updated_at:new Date().toISOString()}).then(function(r){if(r.error)toast('Sync failed, saved on this device')})}
+  else{writing=false;return}
+  p.catch(function(){toast('Sync failed, saved on this device')})
+   .then(function(){writing=false;if(pending){pending=false;flush()}});
+}
+function applyRemote(d){
+  if(!d){if(S.ts)flush();return}
+  if(d.ts>S.ts&&d.json&&d.json.logs){
+    S=d.json;if(!S.order)S.order={};ensurePlans();loadFields(activePlan());setupPlan();
+    try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}
+    var a=document.activeElement;
+    if(!(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'))&&mode!=='workout')render();
+  }else if(d.ts<S.ts){flush()}
 }
 function pull(){
-  if(!sb||!user)return;
-  sb.from('tracker_state').select('ts,json').eq('user_id',user.id).maybeSingle().then(function(r){
-    var d=r&&r.data;
-    if(!d){if(S.ts)flush();return}
-    if(d.ts>S.ts&&d.json&&d.json.logs){
-      S=d.json;if(!S.order)S.order={};ensurePlans();loadFields(activePlan());setupPlan();
-      try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}
-      var a=document.activeElement;
-      if(!(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'))&&mode!=='workout')render();
-    }else if(d.ts<S.ts){flush()}
-  });
+  if(!user)return;
+  if(AWSC){api('GET').then(function(r){if(r.status===200)applyRemote(r.data)}).catch(function(){});return}
+  if(!sb)return;
+  sb.from('tracker_state').select('ts,json').eq('user_id',user.id).maybeSingle().then(function(r){applyRemote(r&&r.data)});
 }
 function showAuth(show,msg){
   var el=document.getElementById('auth');if(!el)return;
   el.style.display=show?'flex':'none';
   var m=document.getElementById('authMsg');if(m)m.textContent=msg||'';
 }
+var pendingEmail='';
+function showCode(on){
+  ['authCode','authConfirm'].forEach(function(i){var e=document.getElementById(i);if(e)e.style.display=on?'':'none'});
+  ['authIn','authUp'].forEach(function(i){var e=document.getElementById(i);if(e)e.style.display=on?'none':''});
+}
+function awsSignIn(em,pw){
+  return cog('InitiateAuth',{AuthFlow:'USER_PASSWORD_AUTH',ClientId:AWSC.clientId,AuthParameters:{USERNAME:em,PASSWORD:pw}})
+    .then(function(j){setTok(j.AuthenticationResult);showAuth(false);pull()});
+}
 function authGo(kind){
   var em=document.getElementById('authEmail').value.trim(),pw=document.getElementById('authPw').value;
-  if(!em||pw.length<6){showAuth(true,'Enter an email and a password of 6+ characters.');return}
+  if(!em||pw.length<8&&AWSC||pw.length<6){showAuth(true,'Enter an email and a password of '+(AWSC?8:6)+'+ characters.');return}
+  if(AWSC){
+    var go=kind==='up'
+      ?cog('SignUp',{ClientId:AWSC.clientId,Username:em,Password:pw,UserAttributes:[{Name:'email',Value:em}]}).then(function(){pendingEmail=em;showCode(true);showAuth(true,'We emailed you a code. Enter it to confirm.')})
+      :awsSignIn(em,pw);
+    go.catch(function(e){
+      if(/not confirmed/i.test(e.message)){pendingEmail=em;showCode(true);showAuth(true,'Confirm your email first. Enter the code we sent.')}
+      else showAuth(true,e.message)});
+    return;
+  }
   var p=kind==='up'?sb.auth.signUp({email:em,password:pw}):sb.auth.signInWithPassword({email:em,password:pw});
   p.then(function(r){
     if(r.error){showAuth(true,r.error.message);return}
@@ -883,6 +931,22 @@ function authGo(kind){
   });
 }
 function initDb(){
+  var ab=document.getElementById('authIn'),au=document.getElementById('authUp'),as=document.getElementById('authSkip'),ac=document.getElementById('authConfirm');
+  if(ab)ab.onclick=function(){authGo('in')};
+  if(au)au.onclick=function(){authGo('up')};
+  if(as)as.onclick=function(){showAuth(false)};
+  if(AWSC){
+    if(ac)ac.onclick=function(){
+      var code=document.getElementById('authCode').value.trim(),pw=document.getElementById('authPw').value;
+      cog('ConfirmSignUp',{ClientId:AWSC.clientId,Username:pendingEmail,ConfirmationCode:code})
+        .then(function(){showCode(false);return awsSignIn(pendingEmail,pw)})
+        .catch(function(e){showAuth(true,e.message)});
+    };
+    var saved=null;try{saved=JSON.parse(localStorage.getItem('roxit.aws')||'null')}catch(e){}
+    if(saved&&saved.id){tok=saved;var c=jwt(tok.id);user={id:c.sub,email:c.email};showAuth(false);pull()}else showAuth(true);
+    document.addEventListener('visibilitychange',function(){if(!document.hidden)pull()});
+    return;
+  }
   if(!window.supabase||!CFG.url||!CFG.key){return}
   sb=window.supabase.createClient(CFG.url,CFG.key);
   sb.auth.onAuthStateChange(function(ev,session){
@@ -894,10 +958,6 @@ function initDb(){
     if(!s)showAuth(true);
   });
   document.addEventListener('visibilitychange',function(){if(!document.hidden)pull()});
-  var ab=document.getElementById('authIn'),au=document.getElementById('authUp'),as=document.getElementById('authSkip');
-  if(ab)ab.onclick=function(){authGo('in')};
-  if(au)au.onclick=function(){authGo('up')};
-  if(as)as.onclick=function(){showAuth(false)};
 }
 
 /* ---------- view state ---------- */

@@ -1,0 +1,193 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Roxit backend. Cognito sign in, one DynamoDB item per user, a tiny Lambda behind an HTTP API.
+
+Parameters:
+  AllowedOrigin:
+    Type: String
+    Default: https://roxit-eight.vercel.app
+    Description: Site that may call the API (CORS). Add http://localhost:3000 later for local work if needed.
+
+Resources:
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: roxit-users
+      UsernameAttributes: [email]
+      AutoVerifiedAttributes: [email]
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireUppercase: false
+          RequireSymbols: false
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: roxit-web
+      GenerateSecret: false
+      ExplicitAuthFlows: [ALLOW_USER_PASSWORD_AUTH, ALLOW_REFRESH_TOKEN_AUTH]
+      PreventUserExistenceErrors: ENABLED
+      RefreshTokenValidity: 90
+      TokenValidityUnits:
+        RefreshToken: days
+        IdToken: hours
+        AccessToken: hours
+
+  StateTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: roxit-state
+      AttributeDefinitions:
+        - AttributeName: user_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: user_id
+          KeyType: HASH
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  FnRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: lambda.amazonaws.com}
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: state-table
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:PutItem]
+                Resource: !GetAtt StateTable.Arn
+
+  StateFn:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: roxit-state
+      Runtime: nodejs20.x
+      Handler: index.handler
+      Role: !GetAtt FnRole.Arn
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          TABLE: !Ref StateTable
+      Code:
+        ZipFile: |
+          const {DynamoDBClient}=require('@aws-sdk/client-dynamodb');
+          const {DynamoDBDocumentClient,GetCommand,PutCommand}=require('@aws-sdk/lib-dynamodb');
+          const db=DynamoDBDocumentClient.from(new DynamoDBClient({}));
+          const T=process.env.TABLE;
+          const H={'content-type':'application/json'};
+          const out=(c,b)=>({statusCode:c,headers:H,body:JSON.stringify(b)});
+          exports.handler=async(e)=>{
+            const sub=e.requestContext.authorizer.jwt.claims.sub;
+            const m=e.requestContext.http.method;
+            if(m==='GET'){
+              const r=await db.send(new GetCommand({TableName:T,Key:{user_id:sub}}));
+              return out(200,r.Item?{ts:r.Item.ts,json:JSON.parse(r.Item.json)}:null);
+            }
+            if(m==='PUT'){
+              let b;try{b=JSON.parse(e.body||'{}')}catch(x){return out(400,{error:'bad json'})}
+              const s=JSON.stringify(b.json||null);
+              if(!b.json||typeof b.ts!=='number')return out(400,{error:'ts and json required'});
+              if(s.length>380000)return out(413,{error:'too large'});
+              try{
+                await db.send(new PutCommand({TableName:T,
+                  Item:{user_id:sub,ts:b.ts,json:s,updated_at:new Date().toISOString()},
+                  ConditionExpression:'attribute_not_exists(user_id) OR ts <= :t',
+                  ExpressionAttributeValues:{':t':b.ts}}));
+              }catch(x){
+                if(x.name==='ConditionalCheckFailedException')return out(409,{error:'newer version stored'});
+                throw x;
+              }
+              return out(200,{ok:true});
+            }
+            return out(405,{error:'method'});
+          };
+
+  Api:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: roxit-api
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins: [!Ref AllowedOrigin]
+        AllowMethods: [GET, PUT, OPTIONS]
+        AllowHeaders: [authorization, content-type]
+        MaxAge: 86400
+
+  Authorizer:
+    Type: AWS::ApiGatewayV2::Authorizer
+    Properties:
+      ApiId: !Ref Api
+      Name: cognito
+      AuthorizerType: JWT
+      IdentitySource: ['$request.header.Authorization']
+      JwtConfiguration:
+        Audience: [!Ref UserPoolClient]
+        Issuer: !Sub https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}
+
+  Integration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref Api
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt StateFn.Arn
+      PayloadFormatVersion: '2.0'
+
+  GetRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref Api
+      RouteKey: GET /state
+      AuthorizationType: JWT
+      AuthorizerId: !Ref Authorizer
+      Target: !Sub integrations/${Integration}
+
+  PutRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref Api
+      RouteKey: PUT /state
+      AuthorizationType: JWT
+      AuthorizerId: !Ref Authorizer
+      Target: !Sub integrations/${Integration}
+
+  Stage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref Api
+      StageName: $default
+      AutoDeploy: true
+
+  InvokePerm:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref StateFn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*/*/state
+
+Outputs:
+  Region:
+    Value: !Ref AWS::Region
+  ClientId:
+    Value: !Ref UserPoolClient
+  ApiUrl:
+    Value: !GetAtt Api.ApiEndpoint
